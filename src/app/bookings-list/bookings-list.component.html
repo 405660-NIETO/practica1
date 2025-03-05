@@ -1,0 +1,59 @@
+<div class="container mt-4">
+  <h2>Reservas</h2>
+  
+  <!-- Filtros -->
+  <form [formGroup]="searchForm" class="row g-3 mb-4">
+    <div class="col-md-6">
+      <label class="form-label">Buscar</label>
+      <input 
+        type="text" 
+        class="form-control" 
+        placeholder="Buscar por empresa o código" 
+        formControlName="searchTerm">
+    </div>
+  </form>
+
+  <!-- Tabla de Reservas -->
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Empresa</th>
+          <th>Lugar</th>
+          <th>Fecha</th>
+          <th>Personas</th>
+          <th>Total</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let booking of filteredBookings">
+          <td>
+            <span class="badge bg-secondary">{{ booking?.bookingCode || 'N/A' }}</span>
+          </td>
+          <td>{{ booking?.companyName || 'Sin nombre' }}</td>
+          <td>{{ booking?.venueId || 'N/A' }}</td>
+          <td>
+            {{ booking?.eventDate ? (booking.eventDate | date:'dd/MM/yyyy') : 'N/A' }}
+            <small class="d-block text-muted">
+              {{ booking?.startTime || 'N/A' }} - {{ booking?.endTime || 'N/A' }}
+            </small>
+          </td>
+          <td>{{ booking?.totalPeople || 0 }}</td>
+          <td>{{ booking?.totalAmount ? (booking.totalAmount | currency) : 'N/A' }}</td>
+          <td>
+            <span [class]="getStatusBadgeClass(booking?.status)">
+              {{ booking?.status || 'pending' }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Mensj cando no trae nada -->
+    <div *ngIf="filteredBookings.length === 0" class="text-center p-3">
+      <p class="text-muted">No se encontraron reservas</p>
+    </div>
+  </div>
+</div>
